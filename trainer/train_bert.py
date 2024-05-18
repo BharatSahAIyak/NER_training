@@ -77,7 +77,8 @@ def get_file_path():
 
 
 if __name__ == '__main__':
-    dataset = NERDataLoader(get_file_path()).get_ner_dataset()
+    train_dataset = NERDataLoader('../data/train.csv').get_ner_dataset()
+    test_dataset = NERDataLoader('../data/test.csv').get_ner_dataset()
 
     model = DistilBertForTokenClassification.from_pretrained('distilbert-base-uncased', num_labels=len(labels))
     model.config.id2label = id2label
@@ -86,8 +87,8 @@ if __name__ == '__main__':
     trainer = Trainer(
         model=model,
         args=training_args,
-        train_dataset=dataset,
-        eval_dataset=dataset,
+        train_dataset=train_dataset,
+        eval_dataset=test_dataset,
         compute_metrics=compute_metrics
     )
 
