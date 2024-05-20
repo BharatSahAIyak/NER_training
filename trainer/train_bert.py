@@ -63,22 +63,12 @@ def compute_metrics(p):
     }
 
 
-def get_file_path():
-    # Get the path to the data folder
-    data_folder = "../data"
-
-    # read the file names in the folder
-    file_names = os.listdir(data_folder)
-
-    # Get the path to the file
-    file_path = os.path.join(data_folder, file_names[0])
-
-    return file_path
-
-
 if __name__ == '__main__':
-    train_dataset = NERDataLoader('../data/train.csv').get_ner_dataset()
-    test_dataset = NERDataLoader('../data/test.csv').get_ner_dataset()
+    train_path = '../data/train.csv'
+    test_path = '../data/test.csv' if os.path.exists('../data/test.csv') else train_path
+
+    train_dataset = NERDataLoader(train_path).get_ner_dataset()
+    test_dataset = NERDataLoader(test_path).get_ner_dataset()
 
     model = DistilBertForTokenClassification.from_pretrained('distilbert-base-uncased', num_labels=len(labels))
     model.config.id2label = id2label
